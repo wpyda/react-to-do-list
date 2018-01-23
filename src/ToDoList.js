@@ -1,8 +1,6 @@
 import React from 'react'
 import {database} from './firebase'
 
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import Paper from 'material-ui/Paper'
 import RaisedButton from 'material-ui/RaisedButton'
 import ActionDelete from 'material-ui/svg-icons/action/delete'
 import TextField from 'material-ui/TextField'
@@ -11,18 +9,19 @@ import {List, ListItem} from 'material-ui/List';
 const Task = (props) => (
 
     <ListItem
+        style={
+            props.taskDone === false ?
+                {textDecoration: 'none'}
+                :
+                {textDecoration: 'line-through'}
+        }
         primaryText={props.taskName}
         rightIcon={
             <ActionDelete
                 onClick={() => props.deleteTask(props.taskId)}/>}
+        onClick={() => props.toggleDone(props.taskId, props.taskDone)}
     />
 )
-
-const style = {
-    margin: 25,
-    padding: 25,
-    textAlign: 'center'
-}
 
 class ToDoList extends React.Component {
 
@@ -56,7 +55,8 @@ class ToDoList extends React.Component {
             return
         }
 
-        database.ref('/ToDoList-Homework').push({task: this.state.text})
+        database.ref('/ToDoList-Homework')
+            .push({task: this.state.text, done: false})
         this.setState({
             text: ''
         })
@@ -66,45 +66,50 @@ class ToDoList extends React.Component {
         database.ref(`/ToDoList-Homework/${taskId}`).remove()
     }
 
+    toggleDone = (taskId, taskDone) => {
+        database.ref(`/ToDoList-Homework/${taskId}`)
+            .update({done: !taskDone})
+            .then()
+    }
+
     render() {
         return (
-            <MuiThemeProvider>
-                <Paper zDepth={4} style={style}>
-                    <h1>To Do List</h1>
+            <div>
+                <h1>To Do List</h1>
 
-                    <TextField
-                        hintText="Type here"
-                        floatingLabelText="What do you want to do today?"
-                        fullWidth={true}
-                        onChange={this.updateTask}
-                        value={this.state.text}
-                    />
+                <TextField
+                    hintText="Type here"
+                    floatingLabelText="What do you want to do today?"
+                    fullWidth={true}
+                    onChange={this.updateTask}
+                    value={this.state.text}
+                />
 
-                    <RaisedButton
-                        label="Submit"
-                        primary={true}
-                        fullWidth={true}
-                        onClick={this.submitTask}
-                    />
+                <RaisedButton
+                    label="Submit"
+                    primary={true}
+                    fullWidth={true}
+                    onClick={this.submitTask}
+                />
 
-                    <List style={{textAlign: 'left'}}>
-                        {
-                            this.state.tasks
-                            &&
-                            this.state.tasks.map((task) => (
-                                <Task
-                                    taskName={task.task}
-                                    taskId={task.key}
-                                    key={task.key}
-                                    deleteTask={this.deleteTask}
-                                />
-                            ))
-                        }
+                <List style={{textAlign: 'left'}}>
+                    {
+                        this.state.tasks
+                        &&
+                        this.state.tasks.map((task) => (
+                            <Task
+                                taskName={task.task}
+                                taskId={task.key}
+                                key={task.key}
+                                deleteTask={this.deleteTask}
+                                taskDone={task.done}
+                                toggleDone={this.toggleDone}
+                            />
+                        ))
+                    }
 
-                    </List>
-
-                </Paper>
-            </MuiThemeProvider>
+                </List>
+            </div>
         )
     }
 }
