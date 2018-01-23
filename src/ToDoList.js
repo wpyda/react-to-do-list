@@ -78,11 +78,11 @@ class ToDoList extends React.Component {
             .then()
     }
 
-    handleTaskName = (event, value) => {
+    searchTask = (event, value) => {
         this.setState({taskName: value})
     }
 
-    handleTasksSelect = (event, index, value) => this.setState({
+    selectTask = (event, index, value) => this.setState({
         tasksSelect: value
     })
 
@@ -137,20 +137,20 @@ class ToDoList extends React.Component {
 
                 <Card>
                     <CardHeader
-                        title="Filter your Todos"
+                        title="Filter"
                         actAsExpander={true}
                         showExpandableButton={true}
                     />
                     <CardText expandable={true} style={{textAlign: 'left'}}>
                         <TextField
-                            floatingLabelText="Find your Todo ..."
+                            floatingLabelText="Find"
                             fullWidth={true}
-                            onChange={this.handleTaskName}
+                            onChange={this.searchTask}
                         />
                         <SelectField
-                            floatingLabelText="Todos status"
+                            floatingLabelText="Select status"
+                            onChange={this.selectTask}
                             value={this.state.tasksSelect}
-                            onChange={this.handleTasksSelect}
                         >
                             <MenuItem value={0} primaryText="ALL" style={{color: "#blue"}}/>
                             <MenuItem value={1} primaryText="UNDONE"/>
