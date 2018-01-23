@@ -6,6 +6,10 @@ import ActionDelete from 'material-ui/svg-icons/action/delete'
 import TextField from 'material-ui/TextField'
 import {List, ListItem} from 'material-ui/List';
 
+import {Card, CardHeader, CardText} from 'material-ui/Card'
+import SelectField from 'material-ui/SelectField'
+import MenuItem from 'material-ui/MenuItem'
+
 const Task = (props) => (
 
     <ListItem
@@ -27,7 +31,9 @@ class ToDoList extends React.Component {
 
     state = {
         text: '',
-        tasks: null
+        tasks: null,
+        taskName: '',
+        taskSelect: 0
     }
 
     componentWillMount() {
@@ -72,6 +78,14 @@ class ToDoList extends React.Component {
             .then()
     }
 
+    handleTaskName = (event, value) => {
+        this.setState({taskName: value})
+    }
+
+    handleTasksSelect = (event, index, value) => this.setState({
+        tasksSelect: value
+    })
+
     render() {
         return (
             <div>
@@ -96,7 +110,18 @@ class ToDoList extends React.Component {
                     {
                         this.state.tasks
                         &&
-                        this.state.tasks.map((task) => (
+                        this.state.tasks
+                            .filter((el) => el.task.indexOf(this.state.taskName) !== -1)
+                            .filter((el) => (
+                                this.state.tasksSelect === 0 ?
+                                    true
+                                    :
+                                    this.state.tasksSelect === 1 ?
+                                        el.done===false
+                                        :
+                                        el.done===true
+                            ))
+                            .map((task) => (
                             <Task
                                 taskName={task.task}
                                 taskId={task.key}
@@ -109,6 +134,30 @@ class ToDoList extends React.Component {
                     }
 
                 </List>
+
+                <Card>
+                    <CardHeader
+                        title="Filter your Todos"
+                        actAsExpander={true}
+                        showExpandableButton={true}
+                    />
+                    <CardText expandable={true} style={{textAlign: 'left'}}>
+                        <TextField
+                            floatingLabelText="Find your Todo ..."
+                            fullWidth={true}
+                            onChange={this.handleTaskName}
+                        />
+                        <SelectField
+                            floatingLabelText="Todos status"
+                            value={this.state.tasksSelect}
+                            onChange={this.handleTasksSelect}
+                        >
+                            <MenuItem value={0} primaryText="ALL" style={{color: "#blue"}}/>
+                            <MenuItem value={1} primaryText="UNDONE"/>
+                            <MenuItem value={2} primaryText="DONE"/>
+                        </SelectField>
+                    </CardText>
+                </Card>
             </div>
         )
     }
