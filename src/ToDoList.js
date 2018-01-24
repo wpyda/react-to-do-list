@@ -33,7 +33,7 @@ class ToDoList extends React.Component {
         text: '',
         tasks: null,
         taskName: '',
-        taskSelect: 0
+        tasksSelect: 0
     }
 
     componentWillMount() {
