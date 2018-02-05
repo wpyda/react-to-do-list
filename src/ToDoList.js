@@ -20,11 +20,10 @@ const Task = (props) => (
                 {textDecoration: 'line-through'}
         }
         primaryText={props.taskName}
-        rightIcon={
-            <ActionDelete
-                onClick={() => props.deleteTask(props.taskId)}/>}
         onClick={() => props.toggleDone(props.taskId, props.taskDone)}
+        rightIconButton={<ActionDelete onClick={() => props.deleteTask(props.taskId)}/>}
     />
+
 )
 
 class ToDoList extends React.Component {
@@ -89,8 +88,6 @@ class ToDoList extends React.Component {
     render() {
         return (
             <div>
-                <h1>To Do List</h1>
-
                 <TextField
                     hintText="Type here"
                     floatingLabelText="What do you want to do today?"
@@ -117,27 +114,27 @@ class ToDoList extends React.Component {
                                     true
                                     :
                                     this.state.tasksSelect === 1 ?
-                                        el.done===false
+                                        el.done === false
                                         :
-                                        el.done===true
+                                        el.done === true
                             ))
-                            .map((task) => (
-                            <Task
-                                taskName={task.task}
-                                taskId={task.key}
-                                key={task.key}
-                                deleteTask={this.deleteTask}
-                                taskDone={task.done}
-                                toggleDone={this.toggleDone}
-                            />
-                        ))
+                            .map((el) => (
+                                <Task
+                                    taskName={el.task}
+                                    taskId={el.key}
+                                    key={el.key}
+                                    deleteTask={this.deleteTask}
+                                    taskDone={el.done}
+                                    toggleDone={this.toggleDone}
+                                />
+                            ))
                     }
 
                 </List>
 
                 <Card>
                     <CardHeader
-                        title="Filter"
+                        title="Filter your ToDos"
                         actAsExpander={true}
                         showExpandableButton={true}
                     />
