@@ -11,3 +11,6 @@ Launch development server by using `npm start` command.
 2. **Click** on the list element when the activity is **done**
 3. Open **Filters** tab to search for a single activity or select status (ALL, DONE and UNDONE)
 4. Click on the **bin icon** to delete activity from the list
+
+## Demo
+[Online demo version](http://wpyda-react-to-do-list.surge.sh)
